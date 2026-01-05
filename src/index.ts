@@ -1,7 +1,7 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { eventsRoute } from "./routes/events.js";
-import { participantsRoute } from "./routes/participants.js";
+import { eventsRoute } from "./modules/events/events.routes.js";
+import { participantsRoute } from "./modules/participants/participants.routes.js";
 
 const app = new Hono();
 
