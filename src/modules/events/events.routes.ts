@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { prisma } from "../../shared/lib/prisma.js";
 import { zValidator } from "@hono/zod-validator";
 import { createEventSchema, updateEventSchema } from "./event.validator.js";
+import { EventNotFoundException } from "./event.exception.js";
 
 export const eventsRoute = new Hono()
   .get("/", async (c) => {
@@ -20,6 +21,11 @@ export const eventsRoute = new Hono()
         participants: true,
       },
     });
+
+    if (!event) {
+      throw new EventNotFoundException(id);
+    }
+
     return c.json({ event }, 200);
   })
   .post("/", zValidator("json", createEventSchema), async (c) => {
@@ -42,6 +48,11 @@ export const eventsRoute = new Hono()
   })
   .delete("/:id", async (c) => {
     const id = c.req.param("id");
-    await prisma.event.delete({ where: { id: id } });
+
+    await prisma.event.delete({
+      where: { id: id },
+      include: { participants: true },
+    });
+
     return c.json({ message: `Event deleted successfully` });
   });

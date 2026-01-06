@@ -1,5 +1,5 @@
 {
-  "name": "backendHono",
+  "name": "hono-api-devscale",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
