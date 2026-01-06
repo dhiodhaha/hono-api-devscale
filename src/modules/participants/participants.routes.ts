@@ -5,6 +5,7 @@ import {
   createParticipantSchema,
   updateParticipantSchema,
 } from "./participant.validator.js";
+import { ParticipantNotFoundException } from "./participant.exception.js";
 
 export const participantsRoute = new Hono()
   .get("/", async (c) => {
@@ -20,6 +21,9 @@ export const participantsRoute = new Hono()
         id: id,
       },
     });
+    if (!participant) {
+      throw new ParticipantNotFoundException(id);
+    }
     return c.json({ participant }, 200);
   })
   .post("/", zValidator("json", createParticipantSchema), async (c) => {
