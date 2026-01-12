@@ -4,8 +4,8 @@ import { zValidator } from "@hono/zod-validator";
 import {
   createParticipantSchema,
   updateParticipantSchema,
-} from "./participant.validator.js";
-import { ParticipantNotFoundException } from "./participant.exception.js";
+} from "./participans.validator.js";
+import { ParticipantNotFoundException } from "./participants.exception.js";
 
 export const participantsRoute = new Hono()
   .get("/", async (c) => {
@@ -46,6 +46,6 @@ export const participantsRoute = new Hono()
   })
   .delete("/:id", async (c) => {
     const id = c.req.param("id");
-    await prisma.participant.delete({ where: { id: id } });
+    await prisma.participant.delete({ where: { id } });
     return c.json({ message: "Participant deleted successfully" }, 200);
   });
